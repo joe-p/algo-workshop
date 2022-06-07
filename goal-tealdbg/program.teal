@@ -1,0 +1,33 @@
+#pragma version 6
+main:
+    // make all keys empty byte arrays
+    byte "some key"
+    byte ""
+    app_global_put
+
+    byte "another key"
+    byte ""
+    app_global_put
+
+    byte "yet another key"
+    byte ""
+    app_global_put
+
+    byte "some key"
+    byte "hello world"
+    app_global_put
+    int 1
+    int 2
+    ==
+    bz label1 // 1 =/= 2 so we will always branch to label1
+    byte "another key"
+    byte "unreachable code"
+    app_global_put
+
+label1:
+    byte "yet another key"
+    byte "label1"
+    app_global_put
+    
+    int 1
+    return

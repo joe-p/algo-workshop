@@ -1,0 +1,49 @@
+#pragma version 6
+b main
+
+init: 
+    // Set end as arg[0]
+    byte "end"              // Stack: [ byte("end") ]
+    txna ApplicationArgs 0  // Stack: [ byte(arg[0]), byte("end") ]
+    btoi                    // Stack: [ int(arg[0]), byte("end") ]
+    app_global_put          // Stack: [ ]
+
+    // Set king as creator
+    byte "king"             // Stack: [ byte("king") ]
+    txn Sender              // Stack: [ byte(address), byte("king") ]
+    app_global_put          // Stack: [ ]
+
+    // approve
+    int 1                   // Stack: [ ]
+    return
+
+main:
+    // If this is app creation go to init
+    txn ApplicationID       // Stack: [ int(appID) ]
+    int 0                   // Stack: [ int(0), int(appID) ]
+    ==                      // Stack: [ int(bool) ]
+    bnz init                // Stack: [ ]
+
+    // Ensure the end hasn't been reached
+    global LatestTimestamp  // Stack: [ int(timestamp) ]
+    byte "end"              // Stack: [ byte("end"), int(timestamp) ]
+    app_global_get          // Stack: [ byte(end_value) ]
+    <=                      // Stack: [ int(bool) ]
+    assert                  // Stack: [ ]
+
+    // Ensure the sender is not the current king
+    txn Sender              // Stack: [ byte(address) ]
+    byte "king"             // Stack: [ byte("king"), byte(address) ]
+    app_global_get          // Stack: [ byte(king_value), byte(address) ]
+    !=                      // Stack: [ int(bool) ]
+    assert                  // Stack: [ ]
+
+    // Set king as creator
+    byte "king"             // Stack: [ byte("king") ]
+    txn Sender              // Stack: [ byte(address), byte("king")]
+    app_global_put          // Stack: [ ]
+
+    // approve
+    int 1                   // Stack: [ ]
+    return
+

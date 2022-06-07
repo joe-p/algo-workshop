@@ -1,0 +1,4 @@
+node_modules/
+dryruns/
+index.js*
+*/tests/*.teal
