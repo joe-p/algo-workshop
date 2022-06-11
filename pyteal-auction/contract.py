@@ -114,7 +114,7 @@ if __name__ == "__main__":
     if os.path.exists("approval.teal"):
         os.remove("approval.teal") 
     
-    if os.path.exists("approval.teal"):
+    if os.path.exists("clear.teal"):
         os.remove("clear.teal") 
 
     compiled_approval = compileTeal(approval(), mode=Mode.Application, version=5)
